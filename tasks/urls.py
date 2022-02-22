@@ -14,9 +14,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path, include
-from . import views
+from . import views, apiviews
 
 from django.contrib.auth.views import LogoutView
+from tasks.apiviews import TaskViewSet
+
+from rest_framework_nested import routers
+
+router = routers.SimpleRouter()
+
+router.register(r"api/v1", TaskViewSet)
 
 urlpatterns = [
     path("", views.index),
@@ -46,4 +53,5 @@ urlpatterns = [
     path("mail_time/", views.MailTimeUpdateView.as_view()),
     path("user/logout/", LogoutView.as_view()),
     path("bgjobs/", views.bg_jobs),
+    path("", include(router.urls)),
 ]
