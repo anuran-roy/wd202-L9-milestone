@@ -100,6 +100,11 @@ class QuestionModelTests(TestCase):
         #     "p-4 m-4 bg-gray-200/75" in response._container[0].decode("utf-8"), True
         # )
 
+        newTask = models.Task(user=self.user, title="A", description="A")
+        newTask.save()
+        response = self.client.get(f"/complete_task/{models.Task.objects.first().id}/")
+        self.assertEqual(response.url, "/tasks")
+
         response = self.client.get("/user/logout/")
         self.assertEqual(response.url, "/")
 
@@ -118,6 +123,9 @@ class QuestionModelTests(TestCase):
 
         self.assertEqual(tasks.monitor_mail_times(), 1)
 
+        response = self.client.get("/")
+        self.assertEqual(response.url, "/user/login")
+
     def test_signup(self):
         response = self.client.get("/user/signup")
         self.assertEqual(response.url, "/user/signup/")
@@ -128,3 +136,9 @@ class QuestionModelTests(TestCase):
 
     def test_celery(self):
         self.assertEqual(every_30_seconds(), "Running Every 30 Seconds!")
+        # self.assertEqual("Triggered Background jobs..." in views.bgjobs())
+        self.assertEqual(
+            "Triggered Background jobs..."
+            in views.bg_jobs(self.client.get("/bgjobs/"))._container[0].decode("utf-8"),
+            True,
+        )
