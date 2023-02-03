@@ -4,7 +4,7 @@ billiard==3.6.4.0
 celery==4.4.7
 coverage==5.0.4
 Deprecated==1.2.13
-Django==4.0.1
+Django==4.0.9
 django-filter==21.1
 djangorestframework==3.13.1
 drf-nested-routers==0.93.4
